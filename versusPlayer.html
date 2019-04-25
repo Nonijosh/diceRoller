@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Orbitron:700" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+	<link rel = "stylesheet" href = "css/style.css">
+	<title>Start Game</title>
+</head>
+
+<body class = "img">
+	
+	<!-- The betting form -->
+	<div class = "row h-100 mt-5" style = "display: block;" id = "versusPlayer">
+		<div class = "container text-center mt-4 my-auto mx-auto">
+			<div class = "card border-0 shadow-lg pr-5 pl-5 pb-5 pt-4 mx-auto" style = "max-width: 800px;">
+				<div class = "text-center mb-4">
+					<h3 class = "display-3">Versus Player <img src = "photos/dice-25637_640.png" style = "width: 100px; height: auto;" alt = "dice"></h3>
+				</div>
+				
+				<hr>
+				
+				<div class = "row">
+					<div class = "row col my-auto">
+						<span class = "col bg-dark p-2 rounded text-white">Player 1:</span> 
+						<span class = "col my-auto">Place Stake</span>
+					</div>
+					<input type = "number" class = "col p-2 align-top" name = "stake" id = "p1Stake" placeholder = "$" required><br>
+				</div>
+				<div id="valid-feedback1" style = "display: none;" class = "text-right small text-success">Valid.</div>
+      			<div id="invalid-feedback1" style = "display:none;" class = "text-right small text-danger">Please enter number greater than or equal to 50.</div>
+				
+				<div class = "row mt-4">
+					<div class = "row col my-auto">
+						<span class = "col bg-dark p-2 rounded text-white">Player 2:</span> 
+						<span class = "col my-auto">Place Stake</span>
+					</div>
+					<input type = "number" class = "col p-2 align-top" name = "stake" id = "p2Stake" placeholder = "$" required><br>
+				</div>
+				<div id="valid-feedback2" style = "display: none;" class = "text-right small text-success">Valid.</div>
+      			<div id="invalid-feedback2" style = "display:none;" class = "text-right small text-danger">Please enter number greater than or equal to 50.</div>
+				
+				<hr>
+
+				<div class = "row text-center mt-4">
+					<p class = "col my-auto">(Minimum stake $50)*</p>
+
+					<div class = "col text-right">
+						<button class = "btn zoom btn-gradient text-white mt-2 shadow" type = "submit" onclick = "validateForm(); return false;">Start Game</button>
+						<button class = "btn zoom btn-dark mt-2 shadow" data-toggle = "modal" data-target = "#instructions">Instructions</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- The Betting form end -->
+	
+	<!-- Instructions popup -->
+<div class="modal" id="instructions">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h4 class="modal-title">Instructions</h4>
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+		  </div>
+		  <div class="modal-body">
+			<p>Note: If you click Quit, while game is ON, you will lose all your bet points.</p>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-gradient text-white" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	</div>
+</div>
+	<!-- Instructions popup end -->
+	
+	<!-- Player vs Player battle -->
+	<div class = "row h-100 mt-5" id = "PvP" style = "display: none;">
+		<div class = "container mx-auto my-auto mt-4">
+			<div class = "row bg-white shadow p-3">
+				<div class = "col-sm-4 bg-primary text-white" id = "player1Block">
+					<h2>Player 1</h2>
+					<p>Score: <span id = "p1-score">0</span></p>
+					<p class = "bg-dark text-white p-2 rounded">Placed Bet: <span id ="p1Bet"></span></p>
+				</div>
+				
+				<div class = "col-sm-4 h-100 text-center">
+					<img src = "photos/versus.jpg" alt = "vs" style = "width: 80px; height: auto;" class = "m-2">
+				</div>
+				
+				<div class = "col-sm-4 bg-danger text-white" id = "player2Block">
+					<h2>Player 2</h2>
+					<p>Score: <span id = "p2-score">0</span></p>
+					<p class = "bg-dark text-white p-2 rounded">Placed Bet: <span id ="p2Bet"></span></p>
+				</div>
+			</div>
+			<div class = "card shadow p-3 mt-4 bg-light playArea text-white" style = "height: 400px;">
+				<div class = "row">
+					<div class = "col-sm-6 text-center">
+					<input id="number1" type="number" value="2" style = "display: none;">
+					</div>
+					
+					<div class = "col-sm-6 text-center">
+					<input id="number2" type="number" value="2" style = "display: none;">
+					</div>
+				</div>
+				
+				<div class = "row h-100 text-center mb-2">
+					<div class = "col-sm-4 my-auto">
+						<div id = "player1Chance" class="toast bg-primary text-white" data-delay="3000">
+							<div class="toast-header">
+							  Player 1
+							</div>
+							<div class="toast-body">
+							  It's your turn to roll the dice.
+							</div>
+					  	</div>
+						<p class = "display-4" id = "diceValue1"></p>
+					</div>
+					
+					<div class = "col-sm-4 text-center my-auto" id = "animated-cup" style = "display: block;">
+						<div id="dice-box1" style = "height: 50px;"></div>
+						<img src = "photos/cup.png" alt = "cup" style = "max-height: 250px;" class = "mx-auto mt-2">
+					</div>
+					
+					<div class = "col-sm-4 my-auto">
+						<div id = "player2Chance" class="toast bg-danger text-white" data-delay="3000">
+							<div class="toast-header">
+							  Player 2
+							</div>
+							<div class="toast-body">
+							  It's your turn to roll the dice.
+							</div>
+					  	</div>
+						<p class = "display-4" id = "diceValue2"></p>
+					</div>
+				</div>
+				
+			</div>
+			<div class = "container text-center mt-2">
+				<button class = "btn m-2" onclick = "rollDiceFromCup();">
+					<img src = "photos/roll dice.jpg" alt = "rolldice button" style = "height: 150px; width: 150px;">
+				</button>
+				<button class = "btn btn-light m-2" data-toggle = "modal" data-target = "#quit">
+					<img src = "photos/quit 2.jpg" alt = "rolldice button" style = "height: 150px; width: 150px;">
+				</button>
+			</div>
+		</div>
+	</div>
+	<!-- Player vs Player battle end -->
+	
+	<!-- Quit game popup -->
+<div class="modal" id="quit">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h4 class="modal-title">Confirm to Quit?</h4>
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+		  </div>
+		  <div class="modal-body">
+			<p>Note: If you click Quit, while game is ON, <span id = "player"></span> will lose all his/her bet points.</p>
+		  </div>
+		  <div class="modal-footer">
+			  <a href = "dice-game.html"><button type = "button" class = "btn bg-dark text-white">Quit anyway!</button></a>
+			<button type="button" class="btn btn-gradient text-white" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	</div>
+</div>
+	<!-- Quit game popup end -->
+	
+	<!-- Winning popup -->
+<div class="modal animated bounceIn" id="winnerModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h4 class="modal-title">Congratulations <span id = "winnerPlayer"></span></h4>
+			<button type="button" class="close" data-dismiss="modal" onclick = "closeModal();">&times;</button>
+		  </div>
+		  <div class="modal-body">
+			<p>You have won <span id = "betPoints"></span> from your opponent.</p>
+		  </div>
+		  <div class="modal-footer">
+			  <button type = "button" class = "btn bg-dark text-white" onClick="document.location.reload(true);">Play Again!</button>
+				<a href = "dice-game.html"><button type="button" class="btn btn-gradient text-white" data-dismiss="modal">Quit</button></a>
+		  </div>
+		</div>
+	</div>
+</div>
+	<!-- Winning popup end -->
+	
+	<!-- Audio -->
+	<audio id="myAudio">
+	  <source src="audio/006143316-dice-shake-cup-06.mp3" type="audio/mp3">
+	  Your browser does not support the audio element.
+	</audio>
+	<!-- Audio end -->
+	
+	<!-- Script -->
+	<script src="https://unpkg.com/roll-a-die@1.3.0/dist/roll-a-die.js"></script>
+	<script src = "js/script.js"></script>
+</body>
+</html>

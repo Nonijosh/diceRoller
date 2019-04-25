@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Orbitron:700" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+	<title>Player vs Player</title>
+	
+	<style>
+		
+		html, body {
+			height: 100%;
+		}
+		
+		.img {
+			background-position: center;
+			background-attachment: fixed;
+			background-image: radial-gradient(circle, rgba(0,0,0,0.6), rgba(0,0,0,0.6), rgba(0,0,0,0.3)), url('photos/dice-bg.jpg');
+		}
+		
+		.zoom:hover {
+			transform: scale(1.1);
+		}
+		
+		.btn-gradient {
+			background: linear-gradient(120deg, #dc3545, orange);
+		}
+		
+
+	</style>
+</head>
+
+<body class = "img">
+	<div class = "row h-100">
+		<div class = "container mx-auto my-auto mt-4">
+			<div class = "row bg-white shadow p-3">
+				<div class = "col">
+					<h3 class = "display-4">Player 1</h3>
+					<p>Score: <span id = "p1-score">0</span></p>
+					<p>Placed Bet: <span id ="p1Bet"></span></p>
+				</div>
+				
+				<div class = "col text-center">
+					<h4 class = "display-4 mt-3">VS</h4>
+				</div>
+				
+				<div class = "col">
+					<h3 class = "display-4">Player 2</h3>
+					<p>Score: <span id = "p2-score">0</span></p>
+					<p>Placed Bet: <span id ="p2Bet"></span></p>
+				</div>
+			</div>
+			<div class = "card shadow p-3 mt-4 bg-light" style = "height: 400px;">
+				<div class = "row">
+					<div class = "col text-center">
+					<input id="number1" type="number" value="1" style = "display: none;">
+					<div id="dice-box1" class = "mt-2" style = "height: 50px;"></div>
+					</div>
+					
+					<div class = "col text-center">
+					<input id="number2" type="number" value="1" style = "display: none;">
+					<div id="dice-box2" class = "mt-2" style = "height: 50px;"></div>
+					</div>
+				</div>
+				
+				<div class = "row h-100 text-center mb-2">
+					<div class = "col my-auto">
+						<p class = "display-4" id = "diceValue1"></p>
+					</div>
+					
+					<div class = "col text-center my-auto" id = "animated-cup" style = "display: none;">
+						<img src = "cup.png" alt = "cup" style = "height: 250px;" class = "mx-auto">
+					</div>
+					
+					<div class = "col my-auto">
+						<p class = "display-4" id = "diceValue2"></p>
+					</div>
+				</div>
+				
+			</div>
+			<div class = "container text-center mt-2">
+				<button class = "btn btn-light m-2" style = "width: 150px;" data-toggle = "modal" data-target = "#quit" onclick = "javascript: playerToLoseOnQuit();">Quit</button>
+				<button class = "btn btn-gradient m-2 text-white" style = "width: 150px;" onclick = "rollDiceFromCup();">Roll</button>
+			</div>
+		</div>
+	</div>
+	
+<div class="modal" id="quit">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h4 class="modal-title">Confirm to Quit?</h4>
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+		  </div>
+		  <div class="modal-body">
+			<p>Note: If you click Quit, while game is ON, <span id = "player"></span> will lose all his/her bet points.</p>
+		  </div>
+		  <div class="modal-footer">
+			  <a href = "dice-game.html"><button type = "button" class = "btn bg-dark text-white">Quit anyway!</button></a>
+			<button type="button" class="btn btn-gradient text-white" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	</div>
+</div>
+	
+	<script src="https://unpkg.com/roll-a-die@1.3.0/dist/roll-a-die.js"></script>
+	
+	<script>
+		var chance = 1;
+		var p1Score = document.getElementById("p1-score");
+		var p2Score = document.getElementById("p2-score");
+		var diceValue1 = document.getElementById("diceValue1");
+		var diceValue2 = document.getElementById("diceValue2");
+		
+		function response(res) {
+			// returns an array of the values from the dice
+			console.log(res);
+			if(chance == 1) {
+				var score = parseInt(p1Score.innerHTML);
+				p1Score.innerHTML = score + res[0];
+				diceValue1.innerHTML = res[0];
+			}
+			else {
+				var score = parseInt(p2Score.innerHTML);
+				p2Score.innerHTML = score + res[0];
+				diceValue2.innerHTML = res[0];
+			}
+			checkWinner();
+		}
+		function rollDiceWithoutValues() {
+			var toggleChance = chance;
+			var element = document.getElementById('dice-box' + toggleChance);
+			const numberOfDice = +document.getElementById('number1').value;
+			const options = {
+			element, // element to display the animated dice in.
+			numberOfDice, // number of dice to use 
+			callback: response
+			}
+			rollADie(options);
+			
+			if(chance == 1) {
+				chance = 2;
+			}
+			else {
+				chance = 1;
+			}
+		}
+		
+		function checkWinner() {
+			if(parseInt(p1Score.innerHTML) >= 50) {
+				window.alert("P1");
+				
+				console.log("winner is p1");
+				clearScores();
+			}
+			if(parseInt(p2Score.innerHTML) >= 50) {
+				window.alert("P2");
+				console.log("winner is p2");
+				clearScores();
+			}
+		}
+		
+		function clearScores() {
+			p1Score.innerHTML = 0;
+			p2Score.innerHTML = 0;
+			diceValue1.innerHTML = "";
+			diceValue2.innerHTML = "";
+		}
+		
+		function playerToLoseOnQuit() {
+			if(chance == 1) {
+				document.getElementById('player').innerHTML = "Player 1";
+			}
+			else {
+				document.getElementById('player').innerHTML = "Player 2";
+			}
+		}
+		
+		function rollDiceFromCup() {			
+			animateCSS('#animated-cup', 'shake', rollDiceWithoutValues());
+		}
+		
+		function animateCSS(element, animationName, callback) {
+			const node = document.querySelector(element);
+			node.classList.add('animated', animationName);
+
+			function handleAnimationEnd() {
+				node.classList.remove('animated', animationName);
+				node.removeEventListener('animationend', handleAnimationEnd);
+
+				if (typeof callback === 'function') window.setTimeout(callback, 2000);
+			}
+			window.setInterval(1000);
+			node.addEventListener('animationend', handleAnimationEnd);
+}
+		
+	</script>
+</body>
+</html>

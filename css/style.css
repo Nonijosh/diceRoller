@@ -1,0 +1,51 @@
+/* CSS Document */
+html, body {
+			height: 100%;
+		}
+
+		/* Add image with radial gradient*/
+		.img {
+			background-position: center;
+			background-attachment: fixed;
+			background-image: radial-gradient(circle, rgba(0,0,0,0.6), rgba(0,0,0,0.6), rgba(0,0,0,0.3)), url('../photos/dice-bg.jpg');
+		}
+
+		/* Give font style to headings*/
+		h1 {
+			font-family: 'Orbitron', sans-serif;
+		}
+		
+		/* Add zoom effect on hovering on buttons*/
+		.zoom:hover {
+			transform: scale(1.1);
+		}
+
+		/* Add Gradient to button */
+		.btn-gradient {
+			background: linear-gradient(120deg, #dc3545, orange);
+		}
+		
+		/* Add text gradient */
+		.text-gradient {
+			background: -webkit-linear-gradient(120deg, #dc3545, orange);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+
+		/* Add image to playing area*/
+		.playArea {
+			background: url('../photos/bet.jpg');
+			background-position: center;
+			height: 100%;
+		}
+		
+		/* Add teal color to background and hover teal color*/
+		.w3-teal,.w3-hover-teal:hover{color:#fff!important;background-color:#009688!important}
+		
+		/* Add animations for top, left, right respectively */
+.w3-animate-top{position:relative;animation:animatetop 0.4s}@keyframes animatetop{from{top:-300px;opacity:0} to{top:0;opacity:1}}
+.w3-animate-left{position:relative;animation:animateleft 0.4s}@keyframes animateleft{from{left:-300px;opacity:0} to{left:0;opacity:1}}
+.w3-animate-right{position:relative;animation:animateright 0.4s}@keyframes animateright{from{right:-300px;opacity:0} to{right:0;opacity:1}}
+
+
+
